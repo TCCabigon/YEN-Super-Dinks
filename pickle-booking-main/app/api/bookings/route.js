@@ -22,7 +22,7 @@ export async function POST(req) {
     const base64 = proofDataUrl.split(",")[1];
     const id = makeId().replace("BK-", "P");
     proof = `/uploads/${Date.now()}-${id}.png`;
-    fs.writeFileSync(path.join(process.cwd(), "public", proof), Buffer.from(base64, "base64"));
+    const fname = proof.replace("/uploads/", "uploads/"); const fpath = path.join(DATA_DIR, fname); try { fs.mkdirSync(path.dirname(fpath), { recursive: true }); } catch(e){} fs.writeFileSync(fpath, Buffer.from(base64, "base64")); proof = "/api/files/" + fname.split("/").pop();
   }
   const id = makeId();
   const status = manual ? "approved" : "pending";
