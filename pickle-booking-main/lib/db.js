@@ -10,7 +10,7 @@ export const RATE = 400;
 
 export function getDb() {
   if (_db) return _db;
-  const dir = process.cwd();
+  const dir = process.env.DATA_DIR || process.cwd();
   const file = path.join(dir, "data.db");
   _db = new Database(file);
   _db.pragma("journal_mode = WAL");
@@ -47,7 +47,7 @@ export function getDb() {
   }
   // uploads dir for proof screenshots
   const up = path.join(dir, "public", "uploads");
-  if (!fs.existsSync(up)) fs.mkdirSync(up, { recursive: true });
+  if (!fs.existsSync(up)) try { fs.mkdirSync(up, { recursive: true }); } catch(e) {}
   return _db;
 }
 
@@ -65,7 +65,7 @@ export function fmtHour(h) {
 }
 
 export function slotLabel(s, e) {
-  return `${fmtHour(s)}–${fmtHour(e)}`;
+  return `${fmtHour(s)}â€“${fmtHour(e)}`;
 }
 
 export function expireHolds() {
